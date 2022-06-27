@@ -1,0 +1,148 @@
+swagger: "2.0"
+info:
+  description: "Server API made as a part of Java Microservice Skill to Scale final project."
+  version: "1.0.0"
+  title: "Server REST API"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:8080"
+basePath: "/api"
+tags:
+- name: "server"
+  description: "manage servers from here"
+schemes:
+- "https"
+- "http"
+paths:
+  /servers:
+    put:
+      tags:
+      - "server"
+      summary: "Add a new server / update existing server"
+      description: ""
+      operationId: "addServer"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Server object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/Server"
+      responses:
+        "400":
+          description: "Invalid input"
+        "202":
+          description: "Server Added"
+    get:
+        tags:
+        - "server"
+        operationId: "getServers"
+        summary: "Get list of all servers"
+        produces:
+        - "application/json"
+        responses:
+          "200":
+            description: "successful operation"
+            schema:
+              type: "array"
+              items:
+                $ref: "#/definitions/Server"
+          "404":
+            description: "No servers found"
+  /servers/find:
+    get:
+      tags:
+      - "server"
+      summary: "Finds Servers by name"
+      description: ""
+      operationId: "findByName"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "query"
+        description: "Complete or partial name of the server"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Server"
+        "404":
+          description: "No such server found"
+  /servers/{id}:
+    get:
+      tags:
+      - "server"
+      summary: "Find server by ID"
+      description: "Returns a single server"
+      operationId: "getServer"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of server to return"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Server"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Server not found"
+    delete:
+      tags:
+      - "server"
+      summary: "Deletes a server"
+      description: ""
+      operationId: "deleteServer"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Server to delete"
+        required: true
+        type: "string"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Server not found"
+        "200":
+          description: "Server Deleted"
+definitions:
+  Server:
+    type: "object"
+    required:
+    - "id"
+    - "name"
+    - "language"
+    - "framework"
+    properties:
+      id:
+        type: "string"
+        example: "123"
+      name:
+        type: "string"
+        example: "Apache Tomcat"
+      language:
+        type: "string"
+        example: "Java"
+      framework:
+        type: "string"
+        example: "Spring"
+    xml:
+      name: "Server"
